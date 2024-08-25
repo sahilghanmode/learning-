@@ -1,36 +1,48 @@
-import React, { useState } from 'react'
-import {BrowserRouter,Routes,Route, useNavigate} from 'react-router-dom'
-const Dashboard = lazy(()=>import ('./components/dashboard'));
-const Landing = lazy(()=>import ('./components/landing'));
+import React, { useContext, } from 'react'
+import { CounterContext } from './context';
+import { RecoilRoot, useRecoilState, useRecoilValue } from 'recoil';
+import { countAtom } from './store/atoms/count';
+
 
 
 
 function App() {
+ 
+  return <div> 
+    <RecoilRoot>
+      <Count/>
+    </RecoilRoot>
+  </div>
 
+}
+
+function Count(){
+  console.log("faltu ki baate");
   return <div>
-  
-    <BrowserRouter>
-    <Appbar/>
-      <Routes>
-        <Route path='/dashboard' element={<Dashboard/>}/>
-        <Route path='/landing' element={<Landing/>}/>
-      </Routes>
-    </BrowserRouter>
-  
+    <CountRenderer/>
+    <Button/>
+  </div>
+}
+function CountRenderer(){
+
+  const count=useRecoilValue(countAtom);
+  return <div>
+    {count}
   </div>
 }
 
-function Appbar(){
-  const navigate=useNavigate();
-
+function Button(){
+  const [count,setCount]=useRecoilState(countAtom);
   return <div>
-
-  <button onClick={()=>{
-      navigate("/dashboard");
-  }}>Dashboard</button>
-  <button onClick={()=>{
-      navigate("/landing");
-  }}>Landing</button>
+    <button onClick={()=>{
+      setCount(count+1)
+    }}>Increase</button>
+    <button onClick={()=>{
+      setCount(count-1)
+    }}>
+      Decrease
+    </button>
   </div>
 }
+
 export default App
